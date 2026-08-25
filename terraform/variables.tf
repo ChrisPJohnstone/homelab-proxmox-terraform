@@ -23,3 +23,10 @@ variable "api_token" {
   type        = string
   nullable    = false
 }
+
+variable "proxmox_node_name" {
+  description = "Proxmox node name"
+  type        = string
+  nullable    = false
+  default     = "proxmox"
+}
