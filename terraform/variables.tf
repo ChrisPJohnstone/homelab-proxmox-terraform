@@ -24,7 +24,7 @@ variable "api_token" {
   nullable    = false
 }
 
-variable "proxmox_node_name" {
+variable "node_name" {
   description = "Proxmox node name"
   type        = string
   nullable    = false

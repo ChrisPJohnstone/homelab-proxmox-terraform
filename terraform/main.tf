@@ -1,19 +1,15 @@
-data "proxmox_version" "test" {}
-
-resource "proxmox_virtual_environment_file" "image" {
+module "debian_image" {
+  source       = "./modules/files/"
+  node_name    = var.node_name
   content_type = "import"
-  datastore_id = "local"
-  node_name    = var.proxmox_node_name
-
-  source_file {
-    path      = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
-    file_name = "debian-12.qcow2"
-  }
+  file_source  = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
+  file_name    = "debian-12.qcow2"
 }
 
 resource "proxmox_virtual_environment_vm" "vm" {
+  depends_on      = [module.debian_image]
   name            = "debian-12"
-  node_name       = var.proxmox_node_name
+  node_name       = var.node_name
   stop_on_destroy = true
   cpu {
     cores = 2
@@ -24,7 +20,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
   disk {
     datastore_id = "local-zfs"
-    import_from  = proxmox_virtual_environment_file.image.id
+    import_from  = module.debian_image.id
     interface    = "scsi0"
     iothread     = true
     discard      = "on"
