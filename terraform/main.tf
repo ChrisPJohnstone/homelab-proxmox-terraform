@@ -16,10 +16,13 @@ module "kubernetes_control_planes" {
 }
 
 module "kubernetes_workers" {
-  depends_on = [module.debian_image]
-  source     = "./modules/vm/"
-  for_each   = var.kubernetes_workers
-  node_name  = var.node_name
-  vm_name    = each.key
-  image_id   = module.debian_image.id
+  depends_on = [
+    module.debian_image,
+    module.kubernetes_control_planes,
+  ]
+  source    = "./modules/vm/"
+  for_each  = var.kubernetes_workers
+  node_name = var.node_name
+  vm_name   = each.key
+  image_id  = module.debian_image.id
 }
