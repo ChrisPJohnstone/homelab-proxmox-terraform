@@ -6,10 +6,20 @@ module "debian_image" {
   file_name    = "debian-12.qcow2"
 }
 
-module "debian_vm" {
+module "kubernetes_control_planes" {
   depends_on = [module.debian_image]
   source     = "./modules/vm/"
+  for_each   = var.kubernetes_control_planes
   node_name  = var.node_name
-  vm_name    = "debian"
+  vm_name    = each.key
+  image_id   = module.debian_image.id
+}
+
+module "kubernetes_workers" {
+  depends_on = [module.debian_image]
+  source     = "./modules/vm/"
+  for_each   = var.kubernetes_workers
+  node_name  = var.node_name
+  vm_name    = each.key
   image_id   = module.debian_image.id
 }
