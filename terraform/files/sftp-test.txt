@@ -1,0 +1,1 @@
+terraform snippet upload via SSH - OK

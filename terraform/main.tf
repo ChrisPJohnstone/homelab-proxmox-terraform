@@ -6,6 +6,15 @@ module "debian_image" {
   file_name    = "debian-12.qcow2"
 }
 
+module "ssh_test_snippet" {
+  source       = "./modules/files/"
+  node_name    = var.node_name
+  content_type = "snippets"
+  datastore_id = "local"
+  file_source  = "${path.module}/files/sftp-test.txt"
+  file_name    = "sftp-test.txt"
+}
+
 module "kubernetes_control_planes" {
   depends_on = [module.debian_image]
   source     = "./modules/vm/"

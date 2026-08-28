@@ -1,4 +1,5 @@
 host="1.1.1.1"
-username="terraform"
+token_username="terraform"
 token_name="tf_token"
-secret_key="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+token_key="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+ssh_username="terraform"

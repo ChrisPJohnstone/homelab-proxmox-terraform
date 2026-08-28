@@ -12,4 +12,8 @@ provider "proxmox" {
   endpoint  = "https://${var.host}:${var.port}"
   insecure  = var.insecure
   api_token = local.api_token
+  ssh {
+    agent    = true
+    username = var.ssh_username
+  }
 }

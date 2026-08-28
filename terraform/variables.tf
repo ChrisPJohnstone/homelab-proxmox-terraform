@@ -18,7 +18,7 @@ variable "insecure" {
   default     = true
 }
 
-variable "username" {
+variable "token_username" {
   description = "Username for proxmox API token"
   type        = string
   nullable    = false
@@ -30,8 +30,14 @@ variable "token_name" {
   nullable    = false
 }
 
-variable "secret_key" {
+variable "token_key" {
   description = "Secret key for the proxmox API token"
+  type        = string
+  nullable    = false
+}
+
+variable "ssh_username" {
+  description = "Username for ssh-agent"
   type        = string
   nullable    = false
 }
