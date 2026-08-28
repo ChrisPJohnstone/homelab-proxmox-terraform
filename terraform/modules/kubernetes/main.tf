@@ -13,40 +13,26 @@ module "network_config" {
   })
 }
 
-# TODO: Fix hostname
-module "first_node_user_config" {
+module "control_plane_user_config" {
   source       = "../files/"
+  count        = var.n_control_planes
   node_name    = var.node_name
   content_type = "snippets"
-  file_name    = "kubernetes-control-plane-user-data.yml"
+  file_name    = "kubernetes-user-${count.index}.yml"
   # TODO: Improve path
   source_raw = templatefile("../cloud-init/kubernetes-user-data.yml", {
     guest_username = var.guest_username
     ssh_public_key = file(var.ssh_public_key_file)
-    is_first_node  = true
+    hostname       = "gaffer-${count.index}"
     apt_key_dir    = var.apt_key_dir
-  })
-}
-
-module "user_config" {
-  source       = "../files/"
-  node_name    = var.node_name
-  content_type = "snippets"
-  file_name    = "kubernetes-worker-user-data.yml"
-  # TODO: Improve path
-  source_raw = templatefile("../cloud-init/kubernetes-user-data.yml", {
-    guest_username = var.guest_username
-    ssh_public_key = file(var.ssh_public_key_file)
-    is_first_node  = false
-    apt_key_dir    = var.apt_key_dir
+    is_first_node  = count.index == 0
   })
 }
 
 module "control_planes" {
   depends_on = [
     module.network_config,
-    module.first_node_user_config,
-    module.user_config,
+    module.control_plane_user_config,
   ]
   source    = "../vm/"
   count     = var.n_control_planes
@@ -55,14 +41,30 @@ module "control_planes" {
   image_id  = var.debian_image_id
   initialization = {
     network_data_file_id = module.network_config[count.index].id
-    user_data_file_id    = count.index == 0 ? module.first_node_user_config.id : module.user_config.id
+    user_data_file_id    = module.control_plane_user_config[count.index].id
   }
+}
+
+module "worker_user_config" {
+  source       = "../files/"
+  count        = var.n_workers
+  node_name    = var.node_name
+  content_type = "snippets"
+  file_name    = "kubernetes-user-${count.index + var.n_control_planes}.yml"
+  # TODO: Improve path
+  source_raw = templatefile("../cloud-init/kubernetes-user-data.yml", {
+    guest_username = var.guest_username
+    ssh_public_key = file(var.ssh_public_key_file)
+    hostname       = count.index % 2 == 0 ? "hoddit-${count.index / 2}" : "doddit-${(count.index - 1) / 2}"
+    apt_key_dir    = var.apt_key_dir
+    is_first_node  = false
+  })
 }
 
 module "workers" {
   depends_on = [
     module.network_config,
-    module.user_config,
+    module.worker_user_config,
   ]
   source    = "../vm/"
   count     = var.n_workers
@@ -71,7 +73,7 @@ module "workers" {
   image_id  = var.debian_image_id
   initialization = {
     network_data_file_id = module.network_config[count.index + var.n_control_planes].id
-    user_data_file_id    = module.user_config.id
+    user_data_file_id    = module.worker_user_config[count.index].id
   }
 }
 
