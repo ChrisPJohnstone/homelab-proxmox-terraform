@@ -19,6 +19,9 @@ resource "proxmox_virtual_environment_vm" "vm" {
     discard      = "on"
     size         = 40
   }
+  serial_device {
+    device = "socket"
+  }
   scsi_hardware = "virtio-scsi-single"
   network_device {
     bridge = "vmbr0"
