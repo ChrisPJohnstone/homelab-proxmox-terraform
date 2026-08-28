@@ -49,18 +49,26 @@ variable "node_name" {
   default     = "proxmox"
 }
 
-variable "kubernetes_control_planes" {
+variable "n_kubernetes_control_planes" {
   # I accept that this should be `n` nodes but this sparks joy
-  description = "List of kubernetes control planes to create"
-  type        = set(string)
+  description = "Number of kubernets control planes to create"
+  type        = number
   nullable    = false
-  default     = ["gaffer"]
+  default     = 1
 }
 
-variable "kubernetes_workers" {
+variable "n_kubernetes_workers" {
   # I accept that this should be `n` nodes but this sparks joy
-  description = "List of kubernetes workers to create"
-  type        = set(string)
+  description = "Number of kubernetes workers to create"
+  type        = number
   nullable    = false
-  default     = ["hoddit", "doddit"]
+  default     = 2
+}
+
+variable "kubernetes_start_ip" {
+  # I accept that this should be `n` nodes but this sparks joy
+  description = "Number to start last octet in kubernetes ip from"
+  type        = number
+  nullable    = false
+  default     = 50
 }
