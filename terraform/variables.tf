@@ -50,7 +50,6 @@ variable "node_name" {
 }
 
 variable "n_kubernetes_control_planes" {
-  # I accept that this should be `n` nodes but this sparks joy
   description = "Number of kubernets control planes to create"
   type        = number
   nullable    = false
@@ -58,7 +57,6 @@ variable "n_kubernetes_control_planes" {
 }
 
 variable "n_kubernetes_workers" {
-  # I accept that this should be `n` nodes but this sparks joy
   description = "Number of kubernetes workers to create"
   type        = number
   nullable    = false
@@ -66,9 +64,8 @@ variable "n_kubernetes_workers" {
 }
 
 variable "kubernetes_start_ip" {
-  # I accept that this should be `n` nodes but this sparks joy
   description = "Number to start last octet in kubernetes ip from"
   type        = number
   nullable    = false
-  default     = 50
+  default     = 150
 }
