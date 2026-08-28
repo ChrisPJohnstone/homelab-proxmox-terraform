@@ -11,12 +11,6 @@ variable "datastore_id" {
   default     = "local"
 }
 
-variable "name" {
-  description = "Name to give VM"
-  type        = string
-  nullable    = false
-}
-
 variable "debian_image_id" {
   description = "File ID for debian image"
   type        = string
@@ -29,17 +23,32 @@ variable "user_data_file_id" {
   nullable    = false
 }
 
+variable "n_control_planes" {
+  description = "Number of kubernets control planes to create"
+  type        = number
+  nullable    = false
+  default     = 1
+}
+
+variable "n_workers" {
+  description = "Number of kubernetes workers to create"
+  type        = number
+  nullable    = false
+  default     = 2
+}
+
+variable "start_ip" {
+  description = "Number to start last octet in kubernetes ip from"
+  type        = number
+  nullable    = false
+  default     = 150
+}
+
 variable "guest_network_interface" {
   description = "Network interface name inside the guest"
   type        = string
   nullable    = false
   default     = "ens18"
-}
-
-variable "guest_ip" {
-  description = "Static IP address for the guest (e.g. 192.168.122.10)"
-  type        = string
-  nullable    = false
 }
 
 variable "guest_subnet" {

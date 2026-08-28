@@ -18,31 +18,15 @@ module "user_config" {
   })
 }
 
-module "kubernetes_control_planes" {
+module "kubernetes" {
   depends_on = [
     module.debian_image,
     module.user_config,
   ]
-  source            = "./modules/kubernetes_vm"
-  count             = var.n_kubernetes_control_planes
+  source            = "./modules/kubernetes"
   node_name         = var.node_name
-  name              = "gaffer-${count.index}"
   debian_image_id   = module.debian_image.id
   user_data_file_id = module.user_config.id
-  guest_ip          = "192.168.0.${count.index + var.kubernetes_start_ip}"
-}
-
-module "kubernetes_workers" {
-  depends_on = [
-    module.debian_image,
-    module.user_config,
-    module.kubernetes_control_planes,
-  ]
-  source            = "./modules/kubernetes_vm"
-  count             = var.n_kubernetes_workers
-  node_name         = var.node_name
-  name              = count.index % 2 == 0 ? "hoddit-${count.index / 2}" : "doddit-${(count.index - 1) / 2}"
-  debian_image_id   = module.debian_image.id
-  user_data_file_id = module.user_config.id
-  guest_ip          = "192.168.0.${count.index + var.kubernetes_start_ip + var.n_kubernetes_control_planes}"
+  n_control_planes  = 1
+  n_workers         = 2
 }

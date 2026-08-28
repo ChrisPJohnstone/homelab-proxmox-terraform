@@ -55,24 +55,3 @@ variable "node_name" {
   nullable    = false
   default     = "proxmox"
 }
-
-variable "n_kubernetes_control_planes" {
-  description = "Number of kubernets control planes to create"
-  type        = number
-  nullable    = false
-  default     = 1
-}
-
-variable "n_kubernetes_workers" {
-  description = "Number of kubernetes workers to create"
-  type        = number
-  nullable    = false
-  default     = 2
-}
-
-variable "kubernetes_start_ip" {
-  description = "Number to start last octet in kubernetes ip from"
-  type        = number
-  nullable    = false
-  default     = 150
-}
