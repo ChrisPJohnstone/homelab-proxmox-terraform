@@ -31,9 +31,16 @@ variable "guest_network_interface" {
 }
 
 variable "guest_ip" {
-  description = "Static IP address for the guest (e.g. 192.168.122.10/24)"
+  description = "Static IP address for the guest (e.g. 192.168.122.10)"
   type        = string
   nullable    = false
+}
+
+variable "guest_subnet" {
+  description = "Subnet for guest"
+  type        = number
+  nullable    = false
+  default     = 24
 }
 
 variable "guest_gateway" {

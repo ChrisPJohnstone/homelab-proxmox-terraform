@@ -6,7 +6,7 @@ module "network_config" {
   # TODO: Improve path
   source_raw = templatefile("../cloud-init/network.yml", {
     guest_network_interface = var.guest_network_interface
-    guest_ip                = "${var.guest_ip}/24"
+    guest_ip                = "${var.guest_ip}/${var.guest_subnet}"
     guest_gateway           = var.guest_gateway
     guest_dns_servers       = jsonencode(var.guest_dns_servers)
   })
