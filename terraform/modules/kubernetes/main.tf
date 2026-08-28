@@ -13,9 +13,24 @@ module "network_config" {
   })
 }
 
+module "control_plane_user_config" {
+  source       = "../files/"
+  node_name    = var.node_name
+  content_type = "snippets"
+  file_name    = "kubernetes-control-plane-user-data.yml"
+  # TODO: Improve path
+  source_raw = templatefile("../cloud-init/kubernetes-user-data.yml", {
+    guest_username  = var.guest_username
+    ssh_public_key  = file(var.ssh_public_key_file)
+    is_control_node = true
+    apt_key_dir     = var.apt_key_dir
+  })
+}
+
 module "control_planes" {
   depends_on = [
     module.network_config,
+    module.control_plane_user_config,
   ]
   source    = "../vm/"
   count     = var.n_control_planes
@@ -24,13 +39,28 @@ module "control_planes" {
   image_id  = var.debian_image_id
   initialization = {
     network_data_file_id = module.network_config[count.index].id
-    user_data_file_id    = var.user_data_file_id
+    user_data_file_id    = module.control_plane_user_config.id
   }
+}
+
+module "worker_user_config" {
+  source       = "../files/"
+  node_name    = var.node_name
+  content_type = "snippets"
+  file_name    = "kubernetes-worker-user-data.yml"
+  # TODO: Improve path
+  source_raw = templatefile("../cloud-init/kubernetes-user-data.yml", {
+    guest_username  = var.guest_username
+    ssh_public_key  = file(var.ssh_public_key_file)
+    is_control_node = false
+    apt_key_dir     = var.apt_key_dir
+  })
 }
 
 module "workers" {
   depends_on = [
     module.network_config,
+    module.worker_user_config,
   ]
   source    = "../vm/"
   count     = var.n_workers
@@ -39,6 +69,6 @@ module "workers" {
   image_id  = var.debian_image_id
   initialization = {
     network_data_file_id = module.network_config[count.index + var.n_control_planes].id
-    user_data_file_id    = var.user_data_file_id
+    user_data_file_id    = module.worker_user_config.id
   }
 }
