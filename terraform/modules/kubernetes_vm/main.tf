@@ -22,5 +22,6 @@ module "vm" {
   image_id  = var.debian_image_id
   initialization = {
     network_data_file_id = module.network_config.id
+    user_data_file_id    = var.user_data_file_id
   }
 }

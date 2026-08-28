@@ -42,6 +42,13 @@ variable "ssh_username" {
   nullable    = false
 }
 
+variable "ssh_public_key_file" {
+  description = "Path to the public SSH key to install on VMs for access"
+  type        = string
+  nullable    = false
+  default     = "~/.ssh/id_ed25519.pub"
+}
+
 variable "node_name" {
   description = "Proxmox node name"
   type        = string

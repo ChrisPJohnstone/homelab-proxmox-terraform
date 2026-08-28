@@ -23,6 +23,12 @@ variable "debian_image_id" {
   nullable    = false
 }
 
+variable "user_data_file_id" {
+  description = "File ID for cloud-init user config"
+  type        = string
+  nullable    = false
+}
+
 variable "guest_network_interface" {
   description = "Network interface name inside the guest"
   type        = string
