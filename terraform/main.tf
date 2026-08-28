@@ -2,16 +2,21 @@ module "debian_image" {
   source       = "./modules/files/"
   node_name    = var.node_name
   content_type = "import"
-  file_source  = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
   file_name    = "debian-12.qcow2"
+  source_file  = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
 }
 
 module "network_config" {
   source       = "./modules/files/"
   node_name    = var.node_name
   content_type = "snippets"
-  file_source  = "../cloud-init/network.yml"
   file_name    = "network-config.yml"
+  source_raw = templatefile("../cloud-init/network.yml", {
+    guest_network_interface = "net0"
+    guest_ip                = "192.168.0.50"
+    guest_gateway           = "192.168.0.1"
+    guest_dns_servers       = "1.1.1.1"
+  })
 }
 
 module "kubernetes_control_planes" {

@@ -17,10 +17,16 @@ variable "content_type" {
   nullable    = false
 }
 
-variable "file_source" {
-  description = "Where to get file from"
+variable "source_file" {
+  description = "Path to a local file or URL to upload"
   type        = string
-  nullable    = false
+  default     = null
+}
+
+variable "source_raw" {
+  description = "Raw data to upload"
+  type        = string
+  default     = null
 }
 
 variable "file_name" {
