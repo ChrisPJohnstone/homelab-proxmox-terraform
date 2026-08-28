@@ -25,7 +25,7 @@ packages:
   - containerd.io
   - curl
   - kubeadm
-  %{ if is_control_node }
+  %{ if is_first_node }
   - kubectl
   %{ endif }
   - kubelet
@@ -52,7 +52,7 @@ runcmd:
   - sudo apt-mark hold kubelet
   - sudo systemctl enable --now kubelet
 
-  %{ if is_control_node }
+  %{ if is_first_node }
   # Initialise Cluster
   - sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 

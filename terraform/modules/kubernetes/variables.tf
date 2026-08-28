@@ -31,6 +31,13 @@ variable "n_workers" {
   default     = 2
 }
 
+variable "ip_prefix" {
+  description = "Prefix to VM IP's"
+  type        = string
+  nullable    = false
+  default     = "192.168.0"
+}
+
 variable "start_ip" {
   description = "Number to start last octet in kubernetes ip from"
   type        = number
@@ -83,4 +90,11 @@ variable "apt_key_dir" {
   type        = string
   nullable    = false
   default     = "/etc/apt/keyrings/"
+}
+
+variable "ssh_cmd" {
+  description = "Base SSH command to use"
+  type        = string
+  nullable    = false
+  default     = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 }
