@@ -27,7 +27,7 @@ variable "guest_network_interface" {
   description = "Network interface name inside the guest"
   type        = string
   nullable    = false
-  default     = "net0"
+  default     = "ens18"
 }
 
 variable "guest_ip" {
