@@ -1,8 +1,12 @@
 version: 2
 ethernets:
   ${guest_network_interface}:
+    match:
+      name: "en*"
     addresses: [${guest_ip}]
-    gateway4: ${guest_gateway}
+    routes:
+      - to: default
+        via: ${guest_gateway}
     nameservers:
       addresses: ${guest_dns_servers}
     dhcp4: false
