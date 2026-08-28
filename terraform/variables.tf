@@ -18,8 +18,20 @@ variable "insecure" {
   default     = true
 }
 
-variable "api_token" {
-  description = "API Token for auth"
+variable "username" {
+  description = "Username for proxmox API token"
+  type        = string
+  nullable    = false
+}
+
+variable "token_name" {
+  description = "Name of the proxmox API token"
+  type        = string
+  nullable    = false
+}
+
+variable "secret_key" {
+  description = "Secret key for the proxmox API token"
   type        = string
   nullable    = false
 }

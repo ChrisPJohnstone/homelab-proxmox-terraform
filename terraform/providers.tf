@@ -11,5 +11,5 @@ terraform {
 provider "proxmox" {
   endpoint  = "https://${var.host}:${var.port}"
   insecure  = var.insecure
-  api_token = var.api_token
+  api_token = local.api_token
 }
