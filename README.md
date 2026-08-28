@@ -36,12 +36,22 @@ This project uses SSH keys to transfer files from the users machine (e.g. cloud-
   ssh-copy-id -i .ssh/id_ed25519.pub root@1.1.1.1
   ```
 
+### Proxmox Settings
+
+> [!NOTE]
+> These commands are intened to be run on the proxmox machine
+
+- Enable content types (snippets is not enabled by default)
+  ```sh
+  pvesm set local -content backup,iso,vztmpl,import,snippets
+  ```
+
 ### Generating API Token
 
 This project is built to authenticate with Proxmox using API token.
 
 > [!NOTE]
-> Setting up the proxmox user needs to be done on the proxmox machine
+> These commands for setup are intended to be run on the proxmox machine
 
 - Create user `terraform` with `PVEAdmin` permissions
   ```sh

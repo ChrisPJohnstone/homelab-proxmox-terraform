@@ -57,3 +57,16 @@ variable "image_id" {
   type        = string
   nullable    = false
 }
+
+variable "initialization" {
+  description = "Cloud-init file IDs to attach to the VM: network_data, user_data, vendor_data, meta_data"
+  type = object({
+    datastore_id         = optional(string)
+    network_data_file_id = optional(string)
+    user_data_file_id    = optional(string)
+    vendor_data_file_id  = optional(string)
+    meta_data_file_id    = optional(string)
+  })
+  nullable = false
+  default  = {}
+}

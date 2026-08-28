@@ -6,22 +6,27 @@ module "debian_image" {
   file_name    = "debian-12.qcow2"
 }
 
-module "ssh_test_snippet" {
+module "network_config" {
   source       = "./modules/files/"
   node_name    = var.node_name
   content_type = "snippets"
-  datastore_id = "local"
-  file_source  = "${path.module}/files/sftp-test.txt"
-  file_name    = "sftp-test.txt"
+  file_source  = "../cloud-init/network.yml"
+  file_name    = "network-config.yml"
 }
 
 module "kubernetes_control_planes" {
-  depends_on = [module.debian_image]
-  source     = "./modules/vm/"
-  for_each   = var.kubernetes_control_planes
-  node_name  = var.node_name
-  vm_name    = each.key
-  image_id   = module.debian_image.id
+  depends_on = [
+    module.debian_image,
+    module.network_config,
+  ]
+  source    = "./modules/vm/"
+  for_each  = var.kubernetes_control_planes
+  node_name = var.node_name
+  vm_name   = each.key
+  image_id  = module.debian_image.id
+  initialization = {
+    network_data_file_id = module.network_config.id
+  }
 }
 
 module "kubernetes_workers" {

@@ -27,4 +27,14 @@ resource "proxmox_virtual_environment_vm" "vm" {
   operating_system {
     type = "l26"
   }
+  dynamic "initialization" {
+    for_each = var.initialization == {} ? [] : [1]
+    content {
+      datastore_id         = coalesce(var.initialization.datastore_id, var.datastore_id)
+      network_data_file_id = var.initialization.network_data_file_id
+      user_data_file_id    = var.initialization.user_data_file_id
+      vendor_data_file_id  = var.initialization.vendor_data_file_id
+      meta_data_file_id    = var.initialization.meta_data_file_id
+    }
+  }
 }
