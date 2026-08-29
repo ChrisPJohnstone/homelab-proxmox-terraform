@@ -94,18 +94,19 @@ resource "null_resource" "wait_for_cloud_init" {
   }
 }
 
-resource "null_resource" "connect_control_planes" {
-  depends_on = [null_resource.wait_for_cloud_init]
-  count      = var.n_control_planes - 1
-  provisioner "local-exec" {
-    command = <<-EOF
-      TARGET="${var.ip_prefix}.${var.start_ip + count.index + 1}"
-      echo "Connecting $TARGET to cluster"
-      JOIN_CMD=$(${local.first_node_ssh_cmd} "sudo kubeadm token create --print-join-command 2>/dev/null")
-      ${var.ssh_cmd} ${var.guest_username}@$TARGET "sudo $JOIN_CMD --control-plane"
-    EOF
-  }
-}
+# TODO: Setup multi control plane - Need either vIP or LB
+# resource "null_resource" "connect_control_planes" {
+#   depends_on = [null_resource.wait_for_cloud_init]
+#   count      = var.n_control_planes - 1
+#   provisioner "local-exec" {
+#     command = <<-EOF
+#       TARGET="${var.ip_prefix}.${var.start_ip + count.index + 1}"
+#       echo "Connecting $TARGET to cluster"
+#       JOIN_CMD=$(${local.first_node_ssh_cmd} "sudo kubeadm token create --print-join-command 2>/dev/null")
+#       ${var.ssh_cmd} ${var.guest_username}@$TARGET "sudo $JOIN_CMD --control-plane"
+#     EOF
+#   }
+# }
 
 resource "null_resource" "connect_workers" {
   depends_on = [null_resource.wait_for_cloud_init]
