@@ -10,7 +10,7 @@ Terraform configuration that provisions my [Proxmox VE](https://www.proxmox.com/
   - Bootstraps cluster with [kubeadm](kubernetes.io/docs/reference/setup-tools/kubeadm/)
   - [cri-o](cri-o.io/) container runtime
   - [flannel](github.com/flannel-io/flannel) Container Network Interface (CNI)
-  - Configurable number of Kubernetes control plane and worker nodes (see [main.tf](./terraform/main.tf))
+  - Configurable number of nodes (see [main.tf](./terraform/main.tf))
 
 ## Usage
 
@@ -29,7 +29,7 @@ This project uses SSH keys to transfer files from the users machine (e.g. cloud-
   ```
 - Generate SSH Key with your email
   ```sh
-  ssh-keygen -t ed25519 -C {email}
+  ssh-keygen -t {type} -C {email}
   ```
   Example
   ```sh
@@ -41,7 +41,7 @@ This project uses SSH keys to transfer files from the users machine (e.g. cloud-
   ```
 - Add your SSH key to proxmox
   ```sh
-  ssh-copy-id -i .ssh/id_ed25519.pub {username}@{host}
+  ssh-copy-id -i {public_key_file} {username}@{host}
   ```
   Example
   ```sh
@@ -65,28 +65,37 @@ This project is built to authenticate with Proxmox using API token.
 > [!NOTE]
 > These commands for setup are intended to be run on the proxmox machine
 
-- Create user `terraform` with `PVEAdmin` permissions
+- Create user with `PVEAdmin` permissions
+  ```sh
+  pveum user add {username}@pam
+  pveum acl modify / --user {username}@pam --role PVEAdmin
+  ```
+  Example
   ```sh
   pveum user add terraform@pam
   pveum acl modify / --user terraform@pam --role PVEAdmin
   ```
-- Generate token name `tf_token` for user `terraform`
+- Generate token
+  ```sh
+  pveum user token add {username}@pam {token_name} --privsep 0
+  ```
+  Example
   ```sh
   pveum user token add terraform@pam tf_token --privsep 0
   ```
 - Output will have a UUID value like `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`. This is your token secret
-- Full token should look something like
+- Full token would look something like
   ```
   {username}@pam!{token_name}={token_secret}
   ```
-  For Example
+  Example
   ```
   terraform@pam!tf_token=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
   ```
 
 ### Update Variables
 
-- Copy [terraform/.auto.tfvars.dist](./terraform/.auto.tfvars.dist) to `terraform/.auto.tfvars`
+- Copy [`terraform/.auto.tfvars.dist`](./terraform/.auto.tfvars.dist) to `terraform/.auto.tfvars`
   ```sh
   cp terraform/.auto.tfvars.dist terraform/.auto.tfvars
   ```
@@ -95,7 +104,8 @@ This project is built to authenticate with Proxmox using API token.
 ### Managing Infrastructure
 
 > [!NOTE]
-> [SSH key needs to be added to every new session](#set-up-ssh-agent)
+> [SSH key needs to be `ssh-add`ed to every new session](#set-up-ssh-agent)
+>
 > All commands should be run from [terraform](./terraform/) directory
 
 - Initialise Terraform
