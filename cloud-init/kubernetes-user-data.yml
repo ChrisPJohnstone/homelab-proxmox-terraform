@@ -11,15 +11,14 @@ bootcmd:
   - mkdir -p ${apt_key_dir}
   - apt-get update
   - apt-get install -y --no-install-recommends gnupg
-    # TODO: Move kubernetes & cri-o versions to var
-  - curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.36/deb/Release.key | gpg --dearmor -o ${apt_key_dir}k8s-key.gpg
-  - curl -fsSL https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v1.36/deb/Release.key | gpg --dearmor -o ${apt_key_dir}cri-o-key.gpg
+  - curl -fsSL https://pkgs.k8s.io/core:/stable:/${kubernetes_version}/deb/Release.key | gpg --dearmor -o ${apt_key_dir}k8s-key.gpg
+  - curl -fsSL https://download.opensuse.org/repositories/isv:/cri-o:/stable:/${kubernetes_version}/deb/Release.key | gpg --dearmor -o ${apt_key_dir}cri-o-key.gpg
 apt:
   sources:
     kubernetes:
-      source: "deb [signed-by=${apt_key_dir}k8s-key.gpg] https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /"
+      source: "deb [signed-by=${apt_key_dir}k8s-key.gpg] https://pkgs.k8s.io/core:/stable:/${kubernetes_version}/deb/ /"
     cri-o:
-      source: "deb [signed-by=${apt_key_dir}cri-o-key.gpg] https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v1.36/deb/ /"
+      source: "deb [signed-by=${apt_key_dir}cri-o-key.gpg] https://download.opensuse.org/repositories/isv:/cri-o:/stable:/${kubernetes_version}/deb/ /"
 package_update: true
 packages:
   - apt-transport-https

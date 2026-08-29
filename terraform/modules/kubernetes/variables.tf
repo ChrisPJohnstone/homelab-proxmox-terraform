@@ -92,6 +92,12 @@ variable "apt_key_dir" {
   default     = "/etc/apt/keyrings/"
 }
 
+variable "kubernetes_version" {
+  description = "Version of kubernetes & CRI-O (CRI-O locks versions with kubernetes) to install"
+  type        = string
+  nullable    = false
+}
+
 variable "ssh_cmd" {
   description = "Base SSH command to use"
   type        = string

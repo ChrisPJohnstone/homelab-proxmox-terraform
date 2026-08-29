@@ -21,11 +21,12 @@ module "control_plane_user_config" {
   file_name    = "kubernetes-user-${count.index}.yml"
   # TODO: Improve path
   source_raw = templatefile("../cloud-init/kubernetes-user-data.yml", {
-    guest_username = var.guest_username
-    ssh_public_key = file(var.ssh_public_key_file)
-    hostname       = "gaffer-${count.index}"
-    apt_key_dir    = var.apt_key_dir
-    is_first_node  = count.index == 0
+    guest_username     = var.guest_username
+    ssh_public_key     = file(var.ssh_public_key_file)
+    kubernetes_version = var.kubernetes_version
+    hostname           = "gaffer-${count.index}"
+    apt_key_dir        = var.apt_key_dir
+    is_first_node      = count.index == 0
   })
 }
 
@@ -53,11 +54,12 @@ module "worker_user_config" {
   file_name    = "kubernetes-user-${count.index + var.n_control_planes}.yml"
   # TODO: Improve path
   source_raw = templatefile("../cloud-init/kubernetes-user-data.yml", {
-    guest_username = var.guest_username
-    ssh_public_key = file(var.ssh_public_key_file)
-    hostname       = count.index % 2 == 0 ? "hoddit-${count.index / 2}" : "doddit-${(count.index - 1) / 2}"
-    apt_key_dir    = var.apt_key_dir
-    is_first_node  = false
+    guest_username     = var.guest_username
+    ssh_public_key     = file(var.ssh_public_key_file)
+    kubernetes_version = var.kubernetes_version
+    hostname           = count.index % 2 == 0 ? "hoddit-${count.index / 2}" : "doddit-${(count.index - 1) / 2}"
+    apt_key_dir        = var.apt_key_dir
+    is_first_node      = false
   })
 }
 
