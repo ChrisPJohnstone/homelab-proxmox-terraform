@@ -103,7 +103,7 @@ resource "null_resource" "wait_for_cloud_init" {
 #       TARGET="${var.ip_prefix}.${var.start_ip + count.index + 1}"
 #       echo "Connecting $TARGET to cluster"
 #       JOIN_CMD=$(${local.first_node_ssh_cmd} "sudo kubeadm token create --print-join-command 2>/dev/null")
-#       ${var.ssh_cmd} ${var.guest_username}@$TARGET "sudo $JOIN_CMD --control-plane"
+#       ${var.ssh_cmd} ${var.guest_username}@$TARGET "sudo $JOIN_CMD --cri-socket=unix:///var/run/crio/crio.sock --control-plane"
 #     EOF
 #   }
 # }
@@ -116,7 +116,7 @@ resource "null_resource" "connect_workers" {
       TARGET="${var.ip_prefix}.${var.start_ip + var.n_control_planes + count.index}"
       echo "Connecting $TARGET to cluster"
       JOIN_CMD=$(${local.first_node_ssh_cmd} "sudo kubeadm token create --print-join-command 2>/dev/null")
-      ${var.ssh_cmd} ${var.guest_username}@$TARGET "sudo $JOIN_CMD"
+      ${var.ssh_cmd} ${var.guest_username}@$TARGET "sudo $JOIN_CMD --cri-socket=unix:///var/run/crio/crio.sock"
     EOF
   }
 }
