@@ -11,9 +11,19 @@ module "kubernetes" {
   source              = "./modules/kubernetes"
   node_name           = var.node_name
   debian_image_id     = module.debian_image.id
+  guest_username      = "chris"
   ssh_public_key_file = var.ssh_public_key_file
   kubernetes_version  = "v1.36"
-  guest_username      = "chris"
   n_control_planes    = 1
   n_workers           = 2
+}
+
+module "database" {
+  depends_on          = [module.debian_image]
+  source              = "./modules/database/"
+  node_name           = var.node_name
+  debian_image_id     = module.debian_image.id
+  guest_username      = "chris"
+  ssh_public_key_file = var.ssh_public_key_file
+  guest_ip            = "192.168.0.149"
 }
