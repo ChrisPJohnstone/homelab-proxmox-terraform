@@ -26,4 +26,5 @@ module "database" {
   guest_username      = "chris"
   ssh_public_key_file = var.ssh_public_key_file
   guest_ip            = "192.168.0.149"
+  admin_password      = var.postgres_admin_password
 }

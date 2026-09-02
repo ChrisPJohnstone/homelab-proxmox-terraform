@@ -5,12 +5,15 @@ Terraform configuration that provisions my [Proxmox VE](https://www.proxmox.com/
 ## Features
 
 - Provisions & Bootstraps a [Kubernetes](https://kubernetes.io/) cluster.
-  - Downloads [Debian](https://debian.org) cloud image to use as base
-  - Uses [Cloud-Init](https://cloud-init.io) to provision, static IP per VM, SSH Access & all user configuration.
+  - [Debian](https://debian.org) cloud image used as base
+  - [Cloud-Init](https://cloud-init.io) provisions static IP per VM, SSH Access & all user configuration.
   - Bootstraps cluster with [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/)
   - [cri-o](https://cri-o.io/) container runtime
   - [flannel](https://github.com/flannel-io/flannel) Container Network Interface (CNI)
   - Configurable number of nodes (see [main.tf](./terraform/main.tf))
+- VM with [Postgres](https://www.postgresql.org/) database to store state for services
+  - [Debian](https://debian.org) cloud image used as base
+  - [Cloud-Init](https://cloud-init.io) provisions static IP, SSH access & user configuration.
 
 ## Usage
 

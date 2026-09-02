@@ -69,3 +69,9 @@ variable "guest_network_interface" {
   nullable    = false
   default     = "ens18"
 }
+
+variable "admin_password" {
+  description = "Password to set for admin user"
+  type        = string
+  nullable    = false
+}

@@ -14,5 +14,5 @@ packages:
 runcmd:
   - sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/15/main/postgresql.conf
   - echo "host all all ${guest_cidr} scram-sha-256" | sudo tee -a /etc/postgresql/15/main/pg_hba.conf
-  - echo "ALTER USER postgres WITH PASSWORD 'CHANGEME';" | sudo -u postgres psql
+  - echo "ALTER USER postgres WITH PASSWORD '${admin_password}';" | sudo -u postgres psql
   - sudo systemctl restart postgresql

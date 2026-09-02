@@ -55,3 +55,9 @@ variable "node_name" {
   nullable    = false
   default     = "proxmox"
 }
+
+variable "postgres_admin_password" {
+  description = "Password to set for postgres database"
+  type        = string
+  nullable    = false
+}
