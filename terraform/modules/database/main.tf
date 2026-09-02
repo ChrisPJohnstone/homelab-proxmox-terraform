@@ -22,6 +22,7 @@ module "user_config" {
     hostname       = var.hostname
     guest_username = var.guest_username
     ssh_public_key = file(var.ssh_public_key_file)
+    guest_cidr     = local.guest_cidr
   })
 }
 
