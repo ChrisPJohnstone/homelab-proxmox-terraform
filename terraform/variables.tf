@@ -34,6 +34,7 @@ variable "token_key" {
   description = "Secret key for the proxmox API token"
   type        = string
   nullable    = false
+  sensitive   = true
 }
 
 variable "ssh_username" {
@@ -60,4 +61,5 @@ variable "postgres_admin_password" {
   description = "Password to set for postgres database"
   type        = string
   nullable    = false
+  sensitive   = true
 }

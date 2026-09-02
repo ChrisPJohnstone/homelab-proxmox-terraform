@@ -74,4 +74,5 @@ variable "admin_password" {
   description = "Password to set for admin user"
   type        = string
   nullable    = false
+  sensitive   = true
 }
